@@ -4,7 +4,7 @@ import React from 'react'
 function SignInPage() {
   return (
     <div>
-      <SignIn redirectUrl="/"/>
+      <SignIn redirectUrl="/prompt"/>
     </div>
   )
 }

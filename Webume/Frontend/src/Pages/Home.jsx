@@ -21,8 +21,7 @@ function Home() {
         <h1 className='mb-5 font-bold text-4xl text-green-700'>Create you website with a single prompt</h1>
         <input type='text' value={userPrompt} onChange={(e)=>setUserPrompt(e.target.value)} placeholder='write your promt here..' className='border-2 outline-none pl-2 rounded-3xl h-10'/>
         <button onClick={submitHandler}>Create</button>
-        <Link to="/sign-up" >signup</Link>
-        <Link to="/sign-in" >signIn</Link>
+        
     </div>
     </div>
   )
