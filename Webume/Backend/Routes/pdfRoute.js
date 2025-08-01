@@ -1,0 +1,20 @@
+import express from "express"
+import {setData } from "../controller/pdfController.js"
+import requiredAuth from "../middleware/verifyClerkUser.js"
+import { upload } from "../middleware/multer.middleware.js"
+
+
+const pdfRouter = express.Router()
+pdfRouter.post('/runsetData',requiredAuth,upload.single("resume"),setData)
+// pdfRouter.post('/runpdfparser',requiredAuth,upload.single("resume"),setData)
+
+
+export default pdfRouter
+
+
+
+
+
+
+
+// Bearer eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zMGJBZEZ5VW1QMVBLSHdlRlNaTXpINVVEZlAiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwOi8vbG9jYWxob3N0OjUxNzMiLCJleHAiOjE3NTM5ODE1MzgsImZ2YSI6WzAsLTFdLCJpYXQiOjE3NTM5ODE0NzgsImlzcyI6Imh0dHBzOi8vYWN0aXZlLXNuYWlsLTUuY2xlcmsuYWNjb3VudHMuZGV2IiwibmJmIjoxNzUzOTgxNDY4LCJzaWQiOiJzZXNzXzMwZUlCZGl6VWJnZlUwaVp5UzVkVGdTdFRWNiIsInN1YiI6InVzZXJfMzBkbjM3aUNzRW1DMkJ0RUhQczZtTEh6Zkd3IiwidiI6Mn0.qigg6bZj_uYzCnHHrnLKPEK-oIYSvRJC3yrYWBnJ5YAqwCLLRIUUmJr6G_lssbWGt793inmSWcNPHDXpql-phHHfOB673fKKtNPik6b7Gfq2f8wOKK-zNrdOhoExUj3qTCvbRox83kVX7_sbk0LmLr7aTxfJFlSZt8bJGt-SA48MGaD0m81MOfibaFap6b9nS5WYU9kLqatMumL5wqCnJLxvSs7H2WAfqSvWNtI_Xb_4xLYA9nWKUeS4U0FkZ5hKd4_CGi4040PZCIx71KcC9vMrS_-9Gji2_CmB7Hs49WeBtb2R3Nz0_VJUICFqICEzQQnmvhNqN0emRBX452KQ8A
