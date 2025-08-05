@@ -1,16 +1,13 @@
-import fs from 'fs'
-// import path from 'path'
 import pdf from 'pdf-parse'
-// import { fileURLToPath } from 'url';
-
-import clerkClient from "@clerk/clerk-sdk-node"
+import {clerkClient} from "@clerk/clerk-sdk-node"
 import { userInfo } from "../models/userInfo.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import axios from "axios"
 
 export const setData =  async(req,res)=> {
    try {
     const userId = req.userId
-    console.log(userId)
+   //  console.log(userId)
     const resumeLocalPath = req.file?.path
     if(!resumeLocalPath)
       res.json({success:false,message:"Resume local path not found"})
@@ -32,7 +29,7 @@ export const setData =  async(req,res)=> {
     })
 
 
-    console.log(userData)
+   //  console.log(userData)
    //  
    //  const {resume} = req.body
    //  console.log(resume)
@@ -45,60 +42,83 @@ export const setData =  async(req,res)=> {
 }
 
 
-export const pdfparser= async(req,res)=>{
-   try {
-      const userId = req.userId
-      const user = await userInfo.findOne({userId})
-      if(!user)
-         res.json({success:false,message:"User Not Found"})
-      const userResumeLink = user.resumelink
-      if(!userResumeLink)
-         res.json({success:false,message:"Resume not found"})
-      
-      let dataBuffer = fs.readFileSync(userResumeLink);
- 
-      pdf(dataBuffer).then(function(data) {
-      
-         // number of pages
-         console.log(data.numpages);
-         // number of rendered pages
-         console.log(data.numrender);
-         // PDF info
-         console.log(data.info);
-         // PDF metadata
-         console.log(data.metadata); 
-         // PDF.js version
-         // check https://mozilla.github.io/pdf.js/getting_started/
-         console.log(data.version);
-         // PDF text
-         console.log(data.text); 
-        
-});
-   } catch (error) {
-      console.log(error)
-      res.json({success:false,message:error.message})
-   }
-}
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-// const filePath = path.resolve(__dirname, 'test', 'data', '05-versions-space.pdf')
-// let dataBuffer = fs.readFileSync(filePath)
-
-// pdf(dataBuffer).then(function(data){
-//     // number of pages
-//     console.log(data.numpages);
-//     // number of rendered pages
-//     console.log(data.numrender);
-//     // PDF info
-//     console.log(data.info);
-//     // PDF metadata
-//     console.log(data.metadata); 
-//     // PDF.js version
-//     // check https://mozilla.github.io/pdf.js/getting_started/
-//     console.log(data.version);
-//     // PDF text
-//     console.log(data.text); 
-// })
-// .catch(function(error){
-//     console.log(error)
-// })
+export const pdfparser = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await userInfo.findOne({ clerkId: userId });
+    
+    if (!user) {
+      return res.json({ success: false, message: "User Not Found" });
+    }
+    
+    const userResumeLink = user.resumelink;
+    if (!userResumeLink) {
+      return res.json({ success: false, message: "Resume not found" });
+    }
+    
+    // Better URL handling
+    let userNewResumeLink = userResumeLink;
+    if (userResumeLink.startsWith('http://')) {
+      userNewResumeLink = userResumeLink.replace('http://', 'https://');
+    }
+    
+    // Validate URL
+    try {
+      new URL(userNewResumeLink);
+    } catch (urlError) {
+      return res.json({ success: false, message: "Invalid resume URL format" });
+    }
+    
+    console.log("Fetching PDF from:", userNewResumeLink);
+    
+    const response = await axios.get(userNewResumeLink, {
+      responseType: "arraybuffer",
+      timeout: 30000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/pdf,*/*'
+      },
+      maxRedirects: 5
+    });
+    
+    console.log("PDF fetched successfully, size:", response.data.length);
+    
+    const dataBuffer = Buffer.from(response.data);
+    const parsed = await pdf(dataBuffer);
+    
+    return res.json({ success: true, text: parsed.text });
+    
+  } catch (error) {
+    console.error("PDF Parser Error:", error);
+    
+    // Handle specific axios errors
+    if (error.response) {
+      // Server responded with error status
+      return res.json({
+        success: false,
+        message: `HTTP Error: ${error.response.status} - ${error.response.statusText}`
+      });
+    } else if (error.request) {
+      // Request was made but no response received
+      return res.json({
+        success: false,
+        message: "Network error: Unable to reach the PDF URL"
+      });
+    } else if (error.code === 'ENOTFOUND') {
+      return res.json({
+        success: false,
+        message: "DNS error: PDF URL not found"
+      });
+    } else if (error.code === 'ETIMEDOUT') {
+      return res.json({
+        success: false,
+        message: "Timeout: PDF download took too long"
+      });
+    } else {
+      return res.json({
+        success: false,
+        message: error.message || "Unknown error occurred"
+      });
+    }
+  }
+};

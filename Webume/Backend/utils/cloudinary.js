@@ -18,7 +18,12 @@ const uploadOnCloudinary = async(localFilePath)=>{
         console.log(localFilePath);
 
         const response = await cloudinary.uploader.upload(localFilePath,{
-            resource_type: "auto"
+            resource_type: "raw",  //By default, Cloudinary may return a preview URL that is rendered for the browser (.pdf may be rendered as an image or inline content), not suitable for raw downloading or parsing.
+//To ensure you get a direct, raw link, you must use the resource_type set to raw during upload, or modify the URL like so:
+            type: "upload",              
+            use_filename: true,          
+            unique_filename: false,      
+            overwrite: true   
         })
         console.log(response)
         console.log("file is uploaded in cloudinary",response.url)

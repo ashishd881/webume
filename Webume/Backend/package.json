@@ -11,10 +11,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/express": "^1.7.14",
     "@google/genai": "^1.10.0",
     "@google/generative-ai": "^0.24.1",
+    "axios": "^1.11.0",
     "child_process": "^1.0.2",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
