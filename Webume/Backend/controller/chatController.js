@@ -40,7 +40,8 @@ export const chat=async(req,res)=>{
                     },
                 ],
             });
-            console.log(response.text)
+            // console.log(response.text)
+            console.log(JSON.stringify(History, null, 2));
             res.json({success:true, message:response.text})
           } catch (error) {
             console.log("goodies")

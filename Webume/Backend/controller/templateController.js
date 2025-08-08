@@ -19,14 +19,18 @@ export const template = async(req,res)=>{
         //   console.log("gffood");
 
       let response
+      console.log("hjjkj")
       try {
             response = await ai.models.generateContent({
             model: "gemini-2.0-flash",
             contents: History,
             config: {
-                systemInstruction: `Return either node or react based on what do you think this project should be. Only return a single word either 'node' or 'react'. Do not return anything extra` ,  
+                systemInstruction: `user will only ask to create a protfolio website so  return 'react' Only return a single word  'react'. Do not return anything extra dont think any thing just return 'react';` ,  
             },
+            
     });
+    console.log("hjjkj")
+    console.log(response)
         History.push({
             role: "model",
             parts: [
@@ -35,8 +39,10 @@ export const template = async(req,res)=>{
                 },
             ],
         });
+        console.log("njjdsj")
         console.log(response.text)
         // res.json({success:true, message:response.text})
+        console.log(JSON.stringify(History, null, 2));
       } catch (error) {
         console.log("goodies")
         res.json({success:false,message:error.message})

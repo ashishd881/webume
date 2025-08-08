@@ -1,39 +1,39 @@
-import {v2 as cloudinary} from "cloudinary"
-import fs from "fs"
-import dotenv from "dotenv"
-// import { response } from "express";
+// import {v2 as cloudinary} from "cloudinary"
+// import fs from "fs"
+// import dotenv from "dotenv"
+// // import { response } from "express";
 
 
-dotenv.config()
+// dotenv.config()
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//     api_key: process.env.CLOUDINARY_API_KEY,
+//     api_secret: process.env.CLOUDINARY_API_SECRET,
+// })
 
-const uploadOnCloudinary = async(localFilePath)=>{
-    try {
-        if(!localFilePath) return null;
-        console.log(localFilePath);
+// const uploadOnCloudinary = async(localFilePath)=>{
+//     try {
+//         if(!localFilePath) return null;
+//         console.log(localFilePath);
 
-        const response = await cloudinary.uploader.upload(localFilePath,{
-            resource_type: "raw",  //By default, Cloudinary may return a preview URL that is rendered for the browser (.pdf may be rendered as an image or inline content), not suitable for raw downloading or parsing.
-//To ensure you get a direct, raw link, you must use the resource_type set to raw during upload, or modify the URL like so:
-            type: "upload",              
-            use_filename: true,          
-            unique_filename: false,      
-            overwrite: true   
-        })
-        console.log(response)
-        console.log("file is uploaded in cloudinary",response.url)
-        fs.unlinkSync(localFilePath)
-        return response
+//         const response = await cloudinary.uploader.upload(localFilePath,{
+//             resource_type: "raw",  //By default, Cloudinary may return a preview URL that is rendered for the browser (.pdf may be rendered as an image or inline content), not suitable for raw downloading or parsing.
+// //To ensure you get a direct, raw link, you must use the resource_type set to raw during upload, or modify the URL like so:
+//             type: "upload",              
+//             use_filename: true,          
+//             unique_filename: false,      
+//             overwrite: true   
+//         })
+//         console.log(response)
+//         console.log("file is uploaded in cloudinary",response.url)
+//         fs.unlinkSync(localFilePath)
+//         return response
     
-    } catch (error) {
-        console.log(error);
-        fs.unlinkSync(localFilePath)
-    }
-}
+//     } catch (error) {
+//         console.log(error);
+//         fs.unlinkSync(localFilePath)
+//     }
+// }
 
-export {uploadOnCloudinary}
+// export {uploadOnCloudinary}

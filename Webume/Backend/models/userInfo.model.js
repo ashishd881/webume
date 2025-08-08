@@ -17,9 +17,9 @@ const userSchema = new Schema({
         required:true,
         unique:true,
     },
-    resumelink:{
+    resumeData:{
         type:String,
-        required:true,
+        
     },
     
     

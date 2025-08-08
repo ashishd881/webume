@@ -4,8 +4,7 @@ import { verifyToken } from "@clerk/clerk-sdk-node"
 const requiredAuth = async (req, res, next) => {
    try {
         const authHeader = req.headers.authorization;
-        
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!authHeader || !authHeader.startsWith('Bearer')) {
             return res.status(401).json({
                 success: false,
                 message: "No valid authorization header"

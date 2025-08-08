@@ -5,7 +5,7 @@ import Navbar from '../Components/Navbar'
 import { AppContext } from '../Context/AppContext'
 
 function DefaultHome() {
-        const {resume, setResume} =useContext(AppContext)
+        const {resume, setResume,parseResume} =useContext(AppContext)
         console.log(resume)
 
   return (
@@ -24,7 +24,8 @@ function DefaultHome() {
                     <Link to="/sign-up" >signup</Link>
                     <Link to="/sign-in" >signIn</Link>
                 </div>
-                <input type='file' value={resume} onChange={(e)=>setResume(e.target.value)} className=''/>
+                {/* <input type='file' value={resume} onChange={(e)=>setResume(e.target.value)} className=''/>
+                <button onClick={()=>parseResume}>Parse Resume</button> */}
         </div>
       
     </div>

@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
-
+import axios from 'axios'
 
 export const AppContext = createContext()
 
 
 const AppContextProvider = ({children})=>{
+
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const {getToken} = useAuth()
     const [token,setToken] = useState("")
     const [user,setUser] = useState("")
@@ -19,12 +21,34 @@ const AppContextProvider = ({children})=>{
         console.error("Failed to fetch token", err);
         }
     }
+    const handleUpload = async (e) => {
+         setResume(e.target.files[0]); // ✅ This is the actual file
+    }
+    const parseResume = async(e)=>{
+        try {
+            // handleUpload()
+            console.log("chal gaya")
+            console.log(resume)
+            const formdata = new FormData();
+            formdata.append('resume',resume)
+            const {response} = await axios.post(backendUrl +'/api/pdfparser/runpdfparser',formdata,{headers:{Authorization: `Bearer ${token}`}})
+            console.log(response)
+            if(response.success)
+            {
+                setUser(response.userData.userName);
+            }
+            console.log("chal phir gaya")
+        } catch (error) {
+            console.log(error.message)
+            
+        }
+    }
     useEffect(() => {
         fetchToken(); 
     }, []);
     return (
         <>
-            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken}}>
+            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken,parseResume,handleUpload}}>
                 {children}
             </AppContext.Provider>
         </>

@@ -5,8 +5,8 @@ import { upload } from "../middleware/multer.middleware.js"
 
 
 const pdfRouter = express.Router()
-pdfRouter.post('/runsetData',requiredAuth,upload.single("resume"),setData)
-pdfRouter.post('/runpdfparser',requiredAuth,pdfparser)
+pdfRouter.post('/runsetData',setData)
+pdfRouter.post('/runpdfparser',upload.single("resume"),requiredAuth,pdfparser)
 
 
 export default pdfRouter
