@@ -1,11 +1,10 @@
 import express from "express"
-import {pdfparser, setData } from "../controller/pdfController.js"
+import {pdfparser} from "../controller/pdfController.js"
 import requiredAuth from "../middleware/verifyClerkUser.js"
 import { upload } from "../middleware/multer.middleware.js"
 
 
 const pdfRouter = express.Router()
-pdfRouter.post('/runsetData',setData)
 pdfRouter.post('/runpdfparser',upload.single("resume"),requiredAuth,pdfparser)
 
 

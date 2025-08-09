@@ -19,7 +19,7 @@ const requiredAuth = async (req, res, next) => {
         const userId = decoded.sub;
         
         req.userId = userId;
-        console.log("Authentication successful for user:", userId);
+        // console.log("Authentication successful for user:", userId);
         
         next();
     } catch (error) {

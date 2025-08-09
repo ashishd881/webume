@@ -11,6 +11,7 @@ const AppContextProvider = ({children})=>{
     const {getToken} = useAuth()
     const [token,setToken] = useState("")
     const [user,setUser] = useState("")
+    const [resumeparsed,setResumeParsed] = useState(false)
     const [resume,setResume] = useState("")
     const fetchToken = async () => { //this has been done just to get the token
         try {
@@ -22,22 +23,21 @@ const AppContextProvider = ({children})=>{
         }
     }
     const handleUpload = async (e) => {
-         setResume(e.target.files[0]); // ✅ This is the actual file
+         setResume(e.target.files[0]); // This is the actual file
     }
     const parseResume = async(e)=>{
         try {
-            // handleUpload()
-            console.log("chal gaya")
+            
             console.log(resume)
             const formdata = new FormData();
             formdata.append('resume',resume)
             const {response} = await axios.post(backendUrl +'/api/pdfparser/runpdfparser',formdata,{headers:{Authorization: `Bearer ${token}`}})
-            console.log(response)
+            setResumeParsed(true)
+            // console.log(response)
             if(response.success)
             {
                 setUser(response.userData.userName);
             }
-            console.log("chal phir gaya")
         } catch (error) {
             console.log(error.message)
             
@@ -48,7 +48,7 @@ const AppContextProvider = ({children})=>{
     }, []);
     return (
         <>
-            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken,parseResume,handleUpload}}>
+            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken,parseResume,handleUpload,resumeparsed}}>
                 {children}
             </AppContext.Provider>
         </>

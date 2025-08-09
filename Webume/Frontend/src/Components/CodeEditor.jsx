@@ -5,7 +5,7 @@ export default function CodeEditor({file}) {
    if (!file) {
     return (
       <div className="h-full flex items-center justify-center text-gray-400">
-        Select a file to view its contents
+        Select a file to view its content
       </div>
     );
   }
@@ -17,7 +17,7 @@ export default function CodeEditor({file}) {
       theme="vs-dark"
       value={file.content || ''}
       options={{
-        readOnly: true,
+        readOnly: false,
         minimap: { enabled: false },
         fontSize: 14,
         wordWrap: 'on',

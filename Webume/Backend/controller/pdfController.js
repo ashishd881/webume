@@ -5,21 +5,7 @@ import { clerkClient } from '@clerk/clerk-sdk-node'
 import { userInfo } from "../models/userInfo.model.js"
 import { History } from '../geminSession/geminiSession.js'
 
-export const setData =  async(req,res)=> {
-   try {
-    
-    // console.log()
-    // console.log(user)
-    
 
-   
-    // res.json({success:true,user:userData,message:"Resume uploaded"})
-   } catch (error) {
-        // console.error("Error in setData:", error);
-        // res.status(500).json({ success: false, message: "Server error" });
-   }
-
-}
 
 
 export const pdfparser = async (req, res) => {
@@ -28,21 +14,18 @@ export const pdfparser = async (req, res) => {
   try {
     
     const resumeLocalPath = req.file?.path
-    console.log(req.file)
+    // console.log(req.file)
     const userId = req.userId
-    console.log(resumeLocalPath)
     if(!resumeLocalPath)
       res.json({success:false,message:"Resume local path not found"})
     
     const pdfPath = resumeLocalPath; // Change to your filename
-    console.log(pdfPath)
     const dataBuffer = fs.readFileSync(pdfPath); // Load the PDF file into buffer
 
     const data = await pdf(dataBuffer); // Parse the buffer
-    console.log(data.text)
+    // console.log(data.text)
     const cleanText = data.text.replace(/\n/g, ' ');
-    console.log("good 1")
-    console.log(userId)
+    // console.log(userId)
   
   const user = await clerkClient.users.getUser(userId);
 
@@ -72,10 +55,6 @@ export const pdfparser = async (req, res) => {
   
   
 
-    // Log the parsed content
-    // console.log("Pages:", data.numpages);
-    // console.log("Info:", data.info);
-    // console.log("Text:", data.text); // Print first 500 chars
 
     
 
