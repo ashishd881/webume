@@ -5,7 +5,15 @@ import { AppContext } from "../Context/AppContext";
 
 function DefaultHome() {
   const { resume, setResume, parseResume } = useContext(AppContext);
-  console.log(resume);
+
+  // Handle resume file upload
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setResume(file);
+      parseResume(file); // assuming parseResume extracts info from the PDF
+    }
+  };
 
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-gray-50">
@@ -31,19 +39,38 @@ function DefaultHome() {
           without starting from scratch.
         </p>
 
-        <div className="mt-10 flex gap-6 justify-center">
-          <Link
-            to="/sign-up"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-          >
-            Sign Up
-          </Link>
-          <Link
-            to="/sign-in"
-            className="px-6 py-3 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-900 transition"
-          >
-            Sign In
-          </Link>
+        <div className="mt-10 flex flex-col md:flex-row gap-6 justify-center items-center">
+          {!resume ? (
+            <>
+              <label className="cursor-pointer px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                Upload Resume
+                <input
+                  type="file"
+                  accept=".pdf"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </label>
+              <Link
+                to="/sign-up"
+                className="px-6 py-3 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-900 transition"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="text-gray-700 mb-4">
+                <strong>Resume Loaded:</strong> {resume.name}
+              </p>
+              <Link
+                to="/create-portfolio"
+                className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+              >
+                Create Portfolio
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
