@@ -8,12 +8,13 @@ import { useWebContainers } from '../hooks/useWebContainers';
 import FileExplorer from '../Components/FileExplorer';
 import {TabView} from '../Components/TabView';
 import { PreviewFrame } from '../Components/PreviewFrame';
+import { AppContext } from '../Context/AppContext';
+import { useContext } from 'react';
 
 function Builder() {
   const location  = useLocation();
   const userPrompt = location.state?.userPrompt;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  // console.log(userPrompt)
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [templateSet, setTemplateSet] = useState(false);
@@ -24,7 +25,7 @@ function Builder() {
   const [activeTab, setActiveTab] = useState('code');
   const [newUserPrompt, setnewUserPrompt] = useState("");
   const webcontainer = useWebContainers();
-
+  const {downloadCode} = useContext(AppContext)
 
   useEffect(()=>{
     let originalFiles = [...files];      //let originalFiles = files Both originalFiles and files are now reference to the exact same array in memory. If you modify originalFiles, files changes too (and vice versa).
@@ -91,8 +92,6 @@ function Builder() {
         
       }))
     }
-    // console.log("yaa fiels")
-    // console.log(files);
     
   },[steps,files])
 
@@ -215,9 +214,12 @@ function Builder() {
   return (
     <div>
       <div className="min-h-screen bg-gray-900 flex flex-col">
-        <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-          <h1 className="text-xl font-semibold text-gray-100">Website Builder</h1>
-          <p className="text-sm text-gray-400 mt-1">Prompt: {userPrompt}</p>
+        <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-100">Webume</h1>
+            <p className="text-sm text-gray-400 mt-1">Prompt: {userPrompt}</p>
+          </div>
+          <button onclick={()=>downloadCode} className='text-xl font-semibold text-gray-100'>Download code as  ZIP</button>
         </header>
         <div className='grid grid-cols-10 gap-2'>
           <div className='border-gray-600 col-span-2 border-2 h-full rounded-2xl'>

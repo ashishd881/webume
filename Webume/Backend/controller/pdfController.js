@@ -45,6 +45,14 @@ export const pdfparser = async (req, res) => {
                     },
                 ],
             });
+    History.push({
+                role: "user",
+                parts: [
+                    {
+                    text:`Note the following the details on the basis of which u have to make portfolio website have be provided above do not to use any Images and make a good Portfolio website `,
+                    },
+                ],
+            });
     // History.push(cleanText);
     // History.push("User Resume Has ended")
     console.log("8888888888888888888888888888888888")

@@ -13,6 +13,10 @@ const AppContextProvider = ({children})=>{
     const [user,setUser] = useState("")
     const [resumeparsed,setResumeParsed] = useState(false)
     const [resume,setResume] = useState("")
+
+    const downloadCode = ()=>{
+
+    }
     const fetchToken = async () => { //this has been done just to get the token
         try {
         const token = await getToken(); 
@@ -48,7 +52,7 @@ const AppContextProvider = ({children})=>{
     }, []);
     return (
         <>
-            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken,parseResume,handleUpload,resumeparsed}}>
+            <AppContext.Provider value={{user,setUser,resume,setResume,token,setToken,fetchToken,parseResume,handleUpload,resumeparsed,downloadCode}}>
                 {children}
             </AppContext.Provider>
         </>
